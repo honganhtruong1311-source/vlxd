@@ -11,7 +11,7 @@ $success = '';
 
 // Lấy dữ liệu dropdown
 $nhacungcaps = $pdo->query("SELECT Mancc, Tenncc FROM Nhacungcap ORDER BY Tenncc")->fetchAll();
-$sanphams = $pdo->query("SELECT Manvl AS Masp, Tennvl AS Tensp, Dvt FROM Nguyenvatlieu ORDER BY Tennvl")->fetchAll();
+$sanphams = $pdo->query("SELECT Manvl  AS Masp, Tennvl AS Tensp, Dvt FROM Nguyenvatlieu ORDER BY Tennvl")->fetchAll();
 $khos = $pdo->query("SELECT Makho, Tenkho FROM Kho ORDER BY Tenkho")->fetchAll();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
