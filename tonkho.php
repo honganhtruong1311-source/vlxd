@@ -265,6 +265,14 @@ if (btnPhieuXuat) {
         submenuPhieuXuat.classList.toggle("d-none");
     });
 }
+const btnSanXuat = document.getElementById("btnSanXuat");
+const submenuSanXuat = document.getElementById("submenuSanXuat");
+
+if (btnSanXuat) {
+    btnSanXuat.addEventListener("click", function () {
+        submenuSanXuat.classList.toggle("d-none");
+    });
+}
 </script>
 </body>
 </html>

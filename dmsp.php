@@ -423,6 +423,10 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("submenuKhachHang")?.classList.toggle("d-none");
     });
 
+    document.getElementById("btnSanXuat")?.addEventListener("click", function () {
+        document.getElementById("submenuSanXuat")?.classList.toggle("d-none");
+    });
+
     // ===== TỰ ĐỘNG MỞ MENU QUẢN LÝ SẢN PHẨM KHI Ở TRANG CON =====
     const path = window.location.pathname;
 
