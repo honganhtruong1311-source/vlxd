@@ -311,7 +311,7 @@ p.text-slate-400 {
           </li>
           <li class="nav-item">
               <a class="nav-link" href="javascript:void(0)" id="btnPhieuXuat">
-                  <i class="fas fa-file-import"></i> Phiếu xuất
+                  <i class="fas fa-file-export"></i> Phiếu xuất
                   <i class="fas fa-chevron-down float-end"></i>
               </a>
 
@@ -324,6 +324,25 @@ p.text-slate-400 {
                   <li class="nav-item">
                       <a class="nav-link" href="phieu_xuat.php">
                           <i class="fas fa-plus-circle"></i> Tạo phiếu xuất
+                      </a>
+                  </li>
+              </ul>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="javascript:void(0)" id="btnSanXuat">
+                  <i class="fas fa-cogs"></i> Sản xuất
+                  <i class="fas fa-chevron-down float-end"></i>
+              </a>
+              <ul class="nav flex-column ms-3 d-none" id="submenuSanXuat">
+                  <li class="nav-item">
+                      <a class="nav-link" href="danh_sach_lenh_san_xuat.php">
+                          <i class="fas fa-list"></i> Danh sách lệnh sản xuất
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="lenh_san_xuat.php">
+                          <i class="fas fa-plus-circle"></i> Tạo lệnh sản xuất
                       </a>
                   </li>
               </ul>
@@ -540,6 +559,15 @@ const submenuPhieuXuat = document.getElementById("submenuPhieuXuat");
 if (btnPhieuXuat) {
     btnPhieuXuat.addEventListener("click", function () {
         submenuPhieuXuat.classList.toggle("d-none");
+    });
+}
+
+const btnSanXuat = document.getElementById("btnSanXuat");
+const submenuSanXuat = document.getElementById("submenuSanXuat");
+
+if (btnSanXuat) {
+    btnSanXuat.addEventListener("click", function () {
+        submenuSanXuat.classList.toggle("d-none");
     });
 }
 
