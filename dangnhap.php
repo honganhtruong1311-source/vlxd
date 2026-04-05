@@ -64,27 +64,35 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ Tendangnhap: u, Matkhau: p })
         });
-        const result = await response.json();
         
-        if (result.success) {
+        if (!response.ok) {
+            const errorData = await response.json();
+            errorDiv.textContent = errorData.message || `Lỗi ${response.status}: Đăng nhập thất bại`;
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+        
+        const result = await response.json();
+        console.log('Login response:', result);
+        
+        if (result.success && result.data && result.data.token) {
             localStorage.setItem('token', result.data.token);
             localStorage.setItem('user', JSON.stringify(result.data.user));
+            console.log('Token stored successfully');
             
-            const vaitro = result.data.user.Vaitro.toLowerCase();
-            
-            if (vaitro === 'admin') {
-                alert("Chào Admin!");
+            // Trì hoãn chuyển hướng để đảm bảo localStorage được lưu
+            setTimeout(() => {
                 window.location.href = 'trangchu.php';
-            } else {
-                alert("Chào Nhân viên!");
-                window.location.href = 'trangchu.php';
-            }
+            }, 500);
         } else {
-            errorDiv.textContent = result.message;
+            const msg = result.message || 'Đăng nhập thất bại. Vui lòng kiểm tra tài khoản và mật khẩu.';
+            errorDiv.textContent = msg;
             errorDiv.classList.remove('hidden');
+            console.log('Login failed:', result);
         }
     } catch (error) {
-        errorDiv.textContent = 'Lỗi kết nối API Gateway (Port 8000).';
+        console.error('Login error:', error);
+        errorDiv.textContent = 'Lỗi kết nối API Gateway (Port 8000). Vui lòng kiểm tra server.';
         errorDiv.classList.remove('hidden');
     }
   });

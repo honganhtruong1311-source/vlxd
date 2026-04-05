@@ -107,7 +107,7 @@ try {
                 foreach ($details as $d) {
                     $tongTien += ($d['Soluong'] ?? 0) * ($d['Dongianhap'] ?? 0);
                 }
-                $stmt = $pdo->prepare("INSERT INTO Phieunhap (Manhaphang, Mancc, Makho, Ngaynhaphang, Tongtiennhap, Ghichu, Trangthai) VALUES (?, ?, ?, ?, ?, ?, 'hoan_thanh')");
+                $stmt = $pdo->prepare("INSERT INTO Phieunhap (Manhaphang, Mancc, Makho, Ngaynhaphang, Tongtiennhap, Ghichu) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$maPN, $mancc, $makho, $ngay, $tongTien, $ghichu]);
 
                 $stmtDet = $pdo->prepare("INSERT INTO Chitiet_Phieunhap (Manhaphang, Manvl, Soluong, Dongianhap) VALUES (?, ?, ?, ?)");
@@ -324,7 +324,7 @@ try {
                     }
                 }
 
-                $stmt = $pdo->prepare("INSERT INTO Phieuxuat (Maxuathang, Makh, Makho, Ngayxuat, Tongtienxuat, Ghichu, Trangthai) VALUES (?, ?, ?, ?, ?, ?, 'hoan_thanh')");
+                $stmt = $pdo->prepare("INSERT INTO Phieuxuat (Maxuathang, Makh, Makho, Ngayxuat, Tongtienxuat, Ghichu) VALUES (?, ?, ?, ?, ?, ?)");
                 $stmt->execute([$mapx, $makh, $makho, $ngay, $tongTien, $ghichu]);
 
                 foreach ($details as $d) {
@@ -447,7 +447,6 @@ try {
             $stmt->execute([$id]);
             $phieu = $stmt->fetch();
             if (!$phieu) jsonResponse(false, 'Phiếu điều chuyển không tồn tại', null, 404);
-            if (($phieu['Trangthai'] ?? '') === 'da_thuc_hien') jsonResponse(false, 'Phiếu đã được thực hiện rồi', null, 409);
 
             $stmtD = $pdo->prepare("SELECT Masp, Soluong FROM Chitiet_Phieudieuchuyen WHERE Madieuchuyen = ?");
             $stmtD->execute([$id]);
@@ -474,9 +473,6 @@ try {
                             ->execute([$phieu['Khonhap'], $masp, $sl]);
                     }
                 }
-                // Cập nhật trạng thái phiếu
-                $pdo->prepare("UPDATE Phieudieuchuyen SET Trangthai = 'da_thuc_hien' WHERE Madieuchuyen = ?")
-                    ->execute([$id]);
                 $pdo->commit();
                 jsonResponse(true, 'Điều chuyển thành công! Tồn kho đã được cập nhật.');
             } catch (Exception $e) {

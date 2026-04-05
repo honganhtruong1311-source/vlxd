@@ -2,14 +2,12 @@
 session_start();
 require_once __DIR__ . '/role_helper.php';
 
-// 1. Kiểm tra bảo mật: Nếu chưa đăng nhập thì bắt quay lại trang dangnhap.php
-if (!isset($_SESSION['user'])) {
-    header("Location: dangnhap.php");
-    exit;
-}
-
-// Lấy thông tin người dùng từ Session để hiển thị
-$user = $_SESSION['user'];
+// Set default user data để tránh lỗi undefined
+$user = isset($_SESSION['user']) ? $_SESSION['user'] : [
+    'fullname' => 'Khách',
+    'username' => 'unknown',
+    'role' => 'guest'
+];
 $role = $user['role'] ?? 'guest';
 $roleName = getRoleName($role);
 
@@ -115,9 +113,9 @@ $page_title = "Trang Chủ - Quản Lý Kho Hàng";
     <div class="text-center mb-4">
         <h4><i class="fas fa-warehouse"></i> Quản Lý Kho</h4>
         <div style="font-size: 0.85rem; margin-top: 10px; padding: 10px; background-color: rgba(255,255,255,0.1); border-radius: 5px;">
-            <div><strong><?= htmlspecialchars($user['fullname'] ?? $user['username']) ?></strong></div>
+            <div><strong id="userDisplayName">Khách</strong></div>
             <div style="font-size: 0.75rem; margin-top: 5px;">
-                <i class="fas fa-user-circle"></i> <?= $roleName ?>
+                <i class="fas fa-user-circle"></i> <span id="userDisplayRole">Chưa xác định</span>
             </div>
         </div>
     </div>
@@ -237,6 +235,30 @@ $page_title = "Trang Chủ - Quản Lý Kho Hàng";
     
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Load user info from localStorage
+    const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    
+    if (!token || !userData) {
+        console.warn('Không tìm thấy token - chuyển hướng tới đăng nhập');
+        setTimeout(() => {
+            window.location.href = 'dangnhap.php';
+        }, 1000);
+    } else {
+        console.log('Token hợp lệ, trang chủ tải thành công');
+        try {
+            const user = JSON.parse(userData);
+            console.log('Đã đăng nhập với tư cách:', user.Tendangnhap, '- Role:', user.Vaitro);
+            
+            // Display user info in sidebar
+            document.getElementById('userDisplayName').textContent = user.Hovaten || user.Tendangnhap || 'Khách';
+            document.getElementById('userDisplayRole').textContent = (user.Vaitro || 'Chưa xác định').toUpperCase();
+        } catch(e) {
+            console.error('Lỗi parse user data:', e);
+            document.getElementById('userDisplayName').textContent = 'Lỗi tải dữ liệu';
+        }
+    }
+    
     // Quản lý sản phẩm
     document.getElementById("btnSanPham").addEventListener("click", function () {
         document.getElementById("submenuSanPham").classList.toggle("d-none");
